@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { PlayerService } from './services/player/player.service';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +7,10 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'rushing-fe';
+  dataList: any[] = []
+  constructor(private playerService: PlayerService) {
+    this.playerService.getPlayers().subscribe(result => {
+      this.dataList = result
+    })
+  }
 }

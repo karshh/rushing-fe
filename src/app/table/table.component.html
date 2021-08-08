@@ -1,0 +1,45 @@
+
+<div class="content" role="main">
+    <section class="container">
+        <table class="table table-striped">
+        <thead>
+            <tr>
+            <th>Player</th>
+            <th>Team</th>
+            <th>Pos</th>
+            <th>Att</th>
+            <th>Att/G</th>
+            <th>Yds</th>
+            <th>Avg</th>
+            <th>Yds/G</th>
+            <th>TD</th>
+            <th>Lng</th>
+            <th>1st</th>
+            <th>1st%</th>
+            <th>20+</th>
+            <th>40+</th>
+            <th>FUM</th>
+            </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let player of players$ | async">
+            <td>{{player.playerName}}</td>
+            <td>{{player.teamAbbreviation}}</td>
+            <td>{{player.playerPostion}}</td>
+            <td>{{player.rushingAttG}}</td>
+            <td>{{player.rushingAttempts}}</td>
+            <td>{{player.rushingYards}}</td>
+            <td>{{player.rushingAvg}}</td>
+            <td>{{player.rushingYdsG}}</td>
+            <td>{{player.rushingTouchdowns}}</td>
+            <td>{{player.rushLongest}}</td>
+            <td>{{player.rushingFD}}</td>
+            <td>{{player.rushingFDP}}</td>
+            <td>{{player.rushing20plus}}</td>
+            <td>{{player.rushing40plus}}</td>
+            <td>{{player.rushingFUM}}</td>
+        </tr>
+        </tbody>
+        </table>
+    </section>
+</div>

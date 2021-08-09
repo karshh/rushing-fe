@@ -10,8 +10,10 @@ export class PlayerService {
 
   constructor(private http: HttpClient) { }
 
+  BASE_URL = 'http://127.0.0.1:5000/players/';
+
   getPlayers() {
-    return this.http.get<Array<any>>('http://127.0.0.1:5000/players/').pipe(
+    return this.http.get<Array<any>>(this.BASE_URL).pipe(
       map(players => {
         return players.map(player => 
           <IPlayer> {

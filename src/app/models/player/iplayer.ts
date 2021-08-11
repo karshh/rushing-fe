@@ -8,7 +8,7 @@ export interface IPlayer {
     rushingAvg: number;
     rushingYdsG: number;
     rushingTouchdowns: number;
-    rushLongest: string;
+    rushingLongest: string;
     rushingFD: number;
     rushingFDP: number;
     rushing20plus: number;

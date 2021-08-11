@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { IPlayer } from 'src/app/models/player/iplayer';
+import { BehaviorSubject, Subject } from 'rxjs';
+import { SortColumn, SortDirection } from 'src/app/directives/sort-property/sort-property.directive';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +13,8 @@ export class PlayerService {
   constructor(private http: HttpClient) { }
 
   BASE_URL = 'http://127.0.0.1:5000/players/';
+
+  players$ = new BehaviorSubject<IPlayer[]>([]);
 
   getPlayers() {
     return this.http.get<Array<any>>(this.BASE_URL).pipe(
@@ -26,7 +30,7 @@ export class PlayerService {
             rushingAvg: player["Avg"],
             rushingYdsG: player["Yds/G"],
             rushingTouchdowns: player["TD"],
-            rushLongest: player["Lng"],
+            rushingLongest: player["Lng"].toString(),
             rushingFD: player["1st"],
             rushingFDP: player["1st%"],
             rushing20plus: player["20+"],
@@ -35,6 +39,44 @@ export class PlayerService {
           }
         )
       }) 
-    )
+    ).subscribe(playersList => {
+      this.players$.next(playersList)
+    })
+  }
+
+  sort(direction: SortDirection, column: SortColumn) {
+    this.players$.getValue().sort((a: IPlayer, b: IPlayer) => {
+      if (column == '') {
+        return a.playerName.localeCompare(b.playerName);
+      }
+      else {
+        switch(direction) {
+          case "asc":
+            switch(column) {
+              case "rushingYards":
+                return b.rushingYards - a.rushingYards;
+              case "rushingTouchdowns":
+                return b.rushingTouchdowns - a.rushingTouchdowns;
+              case "rushingLongest":
+                return parseInt(b.rushingLongest.replace('T', '')) - parseInt(a.rushingLongest.replace('T', ''));
+              default:
+                return a.playerName.localeCompare(b.playerName);
+          }
+          case "desc":
+            switch(column) {
+              case "rushingYards":
+                return a.rushingYards - b.rushingYards;
+              case "rushingTouchdowns":
+                return a.rushingTouchdowns - b.rushingTouchdowns;
+              case "rushingLongest":
+                return parseInt(a.rushingLongest.replace('T', '')) - parseInt(b.rushingLongest.replace('T', ''));
+              default:
+                return a.playerName.localeCompare(b.playerName);
+          }
+          default:
+            return a.playerName.localeCompare(b.playerName);
+        }
+      }
+    })
   }
 }

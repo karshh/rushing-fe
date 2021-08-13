@@ -1,14 +1,5 @@
 import { Directive, EventEmitter, Input, Output } from '@angular/core';
-import { IPlayer } from 'src/app/models/player/iplayer';
-
-export type SortColumn = keyof IPlayer | '';
-export type SortDirection = 'asc' | 'desc' | '';
-const rotate: {[key: string]: SortDirection} = { 'asc': 'desc', 'desc': '', '': 'asc' };
-
-export interface SortEvent {
-  column: SortColumn;
-  direction: SortDirection;
-}
+import { ISortEvent, SortDirection } from '../models/ISortEvent';
 
 @Directive({
   selector: 'th[sort-property]',
@@ -18,14 +9,15 @@ export interface SortEvent {
 })
 export class SortPropertyDirective {
 
-  @Input('sort-property') sortProperty: SortColumn = '';
+  @Input('sort-property') sortProperty: string = '';
   direction: SortDirection = '';
-  @Output() sort = new EventEmitter<SortEvent>();
-  
+  @Output() sort = new EventEmitter<ISortEvent>();
+
+  rotate: {[key: string]: SortDirection} = { 'asc': 'desc', 'desc': '', '': 'asc' };
   constructor() { }
 
   onSort() {
-    this.direction = rotate[this.direction];
+    this.direction = this.rotate[this.direction];
     this.sort.emit({column: this.sortProperty, direction: this.direction});
   }
 

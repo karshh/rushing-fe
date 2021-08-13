@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { IPlayer } from 'src/app/models/player/iplayer';
-import { BehaviorSubject } from 'rxjs';
-import { SortColumn, SortDirection } from 'src/app/directives/sort-property/sort-property.directive';
+import { Subject } from 'rxjs';
+import { ISortState } from '../models/ISortState';
+
+
 
 @Injectable({
   providedIn: 'root'
@@ -12,71 +14,64 @@ export class PlayerService {
 
   constructor(private http: HttpClient) { }
 
+  sortState: ISortState = { 
+    column: 'Player',
+    direction: 1,
+  }
+
   BASE_URL = 'http://127.0.0.1:5000/players/';
 
-  players$ = new BehaviorSubject<IPlayer[]>([]);
+  players$ = new Subject<IPlayer[]>();
 
-  getPlayers() {
-    return this.http.get<Array<any>>(this.BASE_URL).pipe(
+  playerPropertyMap = {
+    playerName:"Player",
+    teamAbbreviation:"Team",
+    playerPostion:"Pos",
+    rushingAttempts:"Att",
+    rushingAttG:"Att/G",
+    rushingYards:"Yds",
+    rushingAvg:"Avg",
+    rushingYdsG:"Yds/G",
+    rushingTouchdowns:"TD",
+    rushingLongest:"Lng",
+    rushingFD:"1st",
+    rushingFDP:"1st%",
+    rushing20plus:"20+",
+    rushing40plus:"40+",
+    rushingFUM:"FUM",
+  }
+
+  getPlayers(filter: string, sort?: ISortState) {
+
+    if (sort != null) this.sortState = { ...sort }
+    var params = new HttpParams()
+      .set('filter', filter)
+      .set('sortColumn', this.sortState.column)
+      .set('sortDirection', this.sortState.direction);
+    return this.http.get<Array<any>>(this.BASE_URL, { params }).pipe(
       map(players => {
         return players.map(player => 
           <IPlayer> {
-            playerName: player["Player"],
-            teamAbbreviation: player["Team"],
-            playerPostion: player["Pos"],
-            rushingAttempts: player["Att"],
-            rushingAttG: player["Att/G"],
-            rushingYards: player["Yds"],
-            rushingAvg: player["Avg"],
-            rushingYdsG: player["Yds/G"],
-            rushingTouchdowns: player["TD"],
-            rushingLongest: player["Lng"].toString(),
-            rushingFD: player["1st"],
-            rushingFDP: player["1st%"],
-            rushing20plus: player["20+"],
-            rushing40plus: player["40+"],
-            rushingFUM: player["FUM"],
+            playerName: player[this.playerPropertyMap.playerName],
+            teamAbbreviation: player[this.playerPropertyMap.teamAbbreviation],
+            playerPostion: player[this.playerPropertyMap.playerPostion],
+            rushingAttempts: player[this.playerPropertyMap.rushingAttempts],
+            rushingAttG: player[this.playerPropertyMap.rushingAttG],
+            rushingYards: player[this.playerPropertyMap.rushingYards],
+            rushingAvg: player[this.playerPropertyMap.rushingAvg],
+            rushingYdsG: player[this.playerPropertyMap.rushingYdsG],
+            rushingTouchdowns: player[this.playerPropertyMap.rushingTouchdowns],
+            rushingLongest: player[this.playerPropertyMap.rushingLongest],
+            rushingFD: player[this.playerPropertyMap.rushingFD],
+            rushingFDP: player[this.playerPropertyMap.rushingFDP],
+            rushing20plus: player[this.playerPropertyMap.rushing20plus],
+            rushing40plus: player[this.playerPropertyMap.rushing40plus],
+            rushingFUM: player[this.playerPropertyMap.rushingFUM],
           }
         )
       }) 
     ).subscribe(playersList => {
       this.players$.next(playersList)
-    })
-  }
-
-  sort(direction: SortDirection, column: SortColumn) {
-    this.players$.getValue().sort((a: IPlayer, b: IPlayer) => {
-      if (column == '') {
-        return a.playerName.localeCompare(b.playerName);
-      }
-      else {
-        switch(direction) {
-          case "asc":
-            switch(column) {
-              case "rushingYards":
-                return b.rushingYards - a.rushingYards;
-              case "rushingTouchdowns":
-                return b.rushingTouchdowns - a.rushingTouchdowns;
-              case "rushingLongest":
-                return parseInt(b.rushingLongest.replace('T', '')) - parseInt(a.rushingLongest.replace('T', ''));
-              default:
-                return a.playerName.localeCompare(b.playerName);
-          }
-          case "desc":
-            switch(column) {
-              case "rushingYards":
-                return a.rushingYards - b.rushingYards;
-              case "rushingTouchdowns":
-                return a.rushingTouchdowns - b.rushingTouchdowns;
-              case "rushingLongest":
-                return parseInt(a.rushingLongest.replace('T', '')) - parseInt(b.rushingLongest.replace('T', ''));
-              default:
-                return a.playerName.localeCompare(b.playerName);
-          }
-          default:
-            return a.playerName.localeCompare(b.playerName);
-        }
-      }
     })
   }
 }

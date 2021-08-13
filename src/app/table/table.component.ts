@@ -4,9 +4,10 @@ import { IPlayer } from '../models/player/iplayer';
 import { PlayerService } from '../services/player/player.service';
 import { faPencilAlt, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { SortColumn, SortDirection } from '../directives/sort-property/sort-property.directive';
-import { FormGroup, FormControl, Validators } from '@angular/forms'
-import { debounceTime, distinctUntilChanged, filter, tap } from 'rxjs/operators';
+import { FormGroup, FormControl } from '@angular/forms'
+import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
+import { SortDirection } from '../directives/models/ISortEvent';
+
 
 @Component({
   selector: 'app-table',
@@ -15,33 +16,34 @@ import { debounceTime, distinctUntilChanged, filter, tap } from 'rxjs/operators'
 })
 export class TableComponent implements OnInit {
 
+  // favicons
   edit = faPencilAlt;
   delete = faTimes;
+
   players$: Observable<IPlayer[]> | undefined;
+  closeModal: string | undefined;
+
+  playerNameControl = new FormControl('');
+  playerNameForm = new FormGroup({
+    playerName: this.playerNameControl,
+  });
 
   constructor(private playerService: PlayerService, private modalService: NgbModal) {
   }
-
-  playerNameControl = new FormControl('')
-  playerNameForm = new FormGroup({
-    playerName: this.playerNameControl,
-  })
 
   ngOnInit(): void {
     this.players$ = this.playerService
     .players$
     .asObservable();
     
-    this.playerService.getPlayers();
+    this.playerService.getPlayers('');
     this.playerNameForm.controls.playerName.valueChanges.pipe(
       debounceTime(400),
       distinctUntilChanged(),
-      // ADD FILTER CHANGE HERE.
+      tap(_ => this.playerService.getPlayers(this.playerNameControl.value))
     ).subscribe()
   }
 
-  closeModal: string | undefined;
-  page = 3
   
   triggerModal(content: any) {
     this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((res) => {
@@ -51,8 +53,12 @@ export class TableComponent implements OnInit {
     });
   }
 
-  onSort(event: { column: SortColumn, direction: SortDirection }) {
-    this.playerService.sort(event.direction, event.column)
+  onSort(event: { column: string, direction: SortDirection }) {
+    var sortState = {
+      column: event.direction == '' ? 'Player' : event.column,
+      direction: event.direction == 'desc' ? -1 : 1
+    }
+    this.playerService.getPlayers(this.playerNameControl.value, sortState);
   }
   
 }

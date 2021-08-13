@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { IPlayer } from 'src/app/models/player/iplayer';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { SortColumn, SortDirection } from 'src/app/directives/sort-property/sort-property.directive';
 
 @Injectable({
@@ -24,8 +24,8 @@ export class PlayerService {
             playerName: player["Player"],
             teamAbbreviation: player["Team"],
             playerPostion: player["Pos"],
-            rushingAttG: player["Att"],
-            rushingAttempts: player["Att/G"],
+            rushingAttempts: player["Att"],
+            rushingAttG: player["Att/G"],
             rushingYards: player["Yds"],
             rushingAvg: player["Avg"],
             rushingYdsG: player["Yds/G"],

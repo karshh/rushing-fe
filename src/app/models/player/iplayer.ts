@@ -2,6 +2,7 @@ export interface IPlayer {
     playerName: string;
     teamAbbreviation: string;
     playerPostion: string;
+    rushingAtt: number;
     rushingAttG: number;
     rushingAttempts: number;
     rushingYards: number;

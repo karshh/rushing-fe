@@ -4,6 +4,7 @@ import { map } from 'rxjs/operators';
 import { IPlayer } from 'src/app/models/player/iplayer';
 import { Subject } from 'rxjs';
 import { ISortState } from '../models/ISortState';
+import { saveAs } from 'file-saver';
 
 
 
@@ -23,32 +24,28 @@ export class PlayerService {
 
   players$ = new Subject<IPlayer[]>();
 
-  playerPropertyMap = {
-    playerName:"Player",
-    teamAbbreviation:"Team",
-    playerPostion:"Pos",
-    rushingAttempts:"Att",
-    rushingAttG:"Att/G",
-    rushingYards:"Yds",
-    rushingAvg:"Avg",
-    rushingYdsG:"Yds/G",
-    rushingTouchdowns:"TD",
-    rushingLongest:"Lng",
-    rushingFD:"1st",
-    rushingFDP:"1st%",
-    rushing20plus:"20+",
-    rushing40plus:"40+",
-    rushingFUM:"FUM",
+  private playerPropertyMap = {
+    playerName: "Player",
+    teamAbbreviation: "Team",
+    playerPostion: "Pos",
+    rushingAttempts: "Att",
+    rushingAttG: "Att/G",
+    rushingYards: "Yds",
+    rushingAvg: "Avg",
+    rushingYdsG: "Yds/G",
+    rushingTouchdowns: "TD",
+    rushingLongest: "Lng",
+    rushingFD: "1st",
+    rushingFDP: "1st%",
+    rushing20plus: "20+",
+    rushing40plus: "40+",
+    rushingFUM: "FUM",
   }
 
-  getPlayers(filter: string, sort?: ISortState) {
-
+  updateState(filter: string, sort?: ISortState) {
     if (sort != null) this.sortState = { ...sort }
-    var params = new HttpParams()
-      .set('filter', filter)
-      .set('sortColumn', this.sortState.column)
-      .set('sortDirection', this.sortState.direction);
-    return this.http.get<Array<any>>(this.BASE_URL, { params }).pipe(
+    this.getPlayers(filter)
+    .pipe(
       map(players => {
         return players.map(player => 
           <IPlayer> {
@@ -70,8 +67,35 @@ export class PlayerService {
           }
         )
       }) 
-    ).subscribe(playersList => {
+    )
+    .subscribe(playersList => {
       this.players$.next(playersList)
     })
   }
+
+  download(filter: string) {
+    this.getPlayers(filter).subscribe(players => {
+      var propertyList = Object.values(this.playerPropertyMap);
+      let csv = players.map((row: any) => 
+        propertyList.map(property => 
+          JSON.stringify(
+            row[property], 
+            (_, value: string | number) => value === null ? '' : value
+          )
+        ).join(',')
+      );
+      csv.unshift(propertyList.join(','));
+      saveAs(new Blob([csv.join('\r\n')], {type: 'text/csv' }), "players.csv");
+    })
+  }
+
+  private getPlayers(filter: string) {
+    var params = new HttpParams()
+      .set('filter', filter)
+      .set('sortColumn', this.sortState.column)
+      .set('sortDirection', this.sortState.direction);
+
+    return this.http.get<Array<any>>(this.BASE_URL, { params })
+  }
+
 }

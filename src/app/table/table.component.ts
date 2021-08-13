@@ -2,12 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { IPlayer } from '../models/player/iplayer';
 import { PlayerService } from '../services/player/player.service';
-import { faPencilAlt, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faPencilAlt, faTimes, faFileExport, faFileImport } from '@fortawesome/free-solid-svg-icons';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormGroup, FormControl } from '@angular/forms'
 import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
 import { SortDirection } from '../directives/models/ISortEvent';
-
 
 @Component({
   selector: 'app-table',
@@ -19,6 +18,8 @@ export class TableComponent implements OnInit {
   // favicons
   edit = faPencilAlt;
   delete = faTimes;
+  export = faFileExport;
+  import = faFileImport;
 
   players$: Observable<IPlayer[]> | undefined;
   closeModal: string | undefined;
@@ -36,11 +37,11 @@ export class TableComponent implements OnInit {
     .players$
     .asObservable();
     
-    this.playerService.getPlayers('');
+    this.playerService.updateState('');
     this.playerNameForm.controls.playerName.valueChanges.pipe(
       debounceTime(400),
       distinctUntilChanged(),
-      tap(_ => this.playerService.getPlayers(this.playerNameControl.value))
+      tap(_ => this.playerService.updateState(this.playerNameControl.value))
     ).subscribe()
   }
 
@@ -58,7 +59,12 @@ export class TableComponent implements OnInit {
       column: event.direction == '' ? 'Player' : event.column,
       direction: event.direction == 'desc' ? -1 : 1
     }
-    this.playerService.getPlayers(this.playerNameControl.value, sortState);
+    this.playerService.updateState(this.playerNameControl.value, sortState);
   }
+
+  onDownloadClick() {
+    this.playerService.download(this.playerNameControl.value);
+    return false;
+}
   
 }

@@ -1,66 +1,73 @@
 
-<div class="content" role="main">
-    <form [formGroup]="playerNameForm">
-        <p>
-            <label for="firstname">Player Name </label>
-            <input type="text" id="playerName" formControlName="playerName">
-        </p>
-    </form>
-       
-    <section class="container">
+<div class="container" role="main">
 
-        <!-- <ngb-pagination [collectionSize]="70" [(page)]="page" [boundaryLinks]="true"></ngb-pagination> -->
-            
-        <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Player</th>
-                <th>Team</th>
-                <th>Pos</th>
-                <th>Att</th>
-                <th>Att/G</th>
-                <th scope="col" sort-property="Yds" (sort)="onSort($event)">Yds</th>
-                <th>Avg</th>
-                <th>Yds/G</th>
-                <th scope="col" sort-property="TD" (sort)="onSort($event)">TD</th>
-                <th scope="col" sort-property="Lng" (sort)="onSort($event)">Lng</th>
-                <th>1st</th>
-                <th>1st%</th>
-                <th>20+</th>
-                <th>40+</th>
-                <th>FUM</th>
-                <th>&nbsp;</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let player of players$ | async">
-                <td>{{player.playerName}}</td>
-                <td>{{player.teamAbbreviation}}</td>
-                <td>{{player.playerPostion}}</td>
-                <td>{{player.rushingAttG}}</td>
-                <td>{{player.rushingAttempts}}</td>
-                <td>{{player.rushingYards}}</td>
-                <td>{{player.rushingAvg}}</td>
-                <td>{{player.rushingYdsG}}</td>
-                <td>{{player.rushingTouchdowns}}</td>
-                <td>{{player.rushingLongest}}</td>
-                <td>{{player.rushingFD}}</td>
-                <td>{{player.rushingFDP}}</td>
-                <td>{{player.rushing20plus}}</td>
-                <td>{{player.rushing40plus}}</td>
-                <td>{{player.rushingFUM}}</td>
-                <td>
-                    <button type="button" class="btn btn-transparent" (click)="triggerModal(editData)">
-                        <fa-icon [icon]="edit"></fa-icon>
-                    </button>
-                    <button type="button" class="btn btn-transparent" (click)="triggerModal(deleteData)">
-                        <fa-icon [icon]="delete"></fa-icon>
-                    </button>
-                </td>
-            </tr>
-        </tbody>
-        </table>
-    </section>
+  <div class="row">
+    <div class="col-auto mr-auto">
+      <form [formGroup]="playerNameForm">
+              <label for="firstname">Player Name</label>
+              <input type="text" id="playerName" formControlName="playerName">
+      </form>
+    </div>
+    <div class="col-auto">
+      <button type="button" class="btn btn-light">
+        Import JSON <fa-icon [icon]="import"></fa-icon>
+      </button>
+      &nbsp;
+      <button type="button" class="btn btn-light" (click)="onDownloadClick()">
+        Export CSV <fa-icon [icon]="export"></fa-icon>
+      </button>
+    </div>
+  </div>
+        
+    <table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Player</th>
+            <th>Team</th>
+            <th>Pos</th>
+            <th>Att</th>
+            <th>Att/G</th>
+            <th scope="col" sort-property="Yds" (sort)="onSort($event)">Yds</th>
+            <th>Avg</th>
+            <th>Yds/G</th>
+            <th scope="col" sort-property="TD" (sort)="onSort($event)">TD</th>
+            <th scope="col" sort-property="Lng" (sort)="onSort($event)">Lng</th>
+            <th>1st</th>
+            <th>1st%</th>
+            <th>20+</th>
+            <th>40+</th>
+            <th>FUM</th>
+            <th>&nbsp;</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let player of players$ | async">
+            <td>{{player.playerName}}</td>
+            <td>{{player.teamAbbreviation}}</td>
+            <td>{{player.playerPostion}}</td>
+            <td>{{player.rushingAttG}}</td>
+            <td>{{player.rushingAttempts}}</td>
+            <td>{{player.rushingYards}}</td>
+            <td>{{player.rushingAvg}}</td>
+            <td>{{player.rushingYdsG}}</td>
+            <td>{{player.rushingTouchdowns}}</td>
+            <td>{{player.rushingLongest}}</td>
+            <td>{{player.rushingFD}}</td>
+            <td>{{player.rushingFDP}}</td>
+            <td>{{player.rushing20plus}}</td>
+            <td>{{player.rushing40plus}}</td>
+            <td>{{player.rushingFUM}}</td>
+            <td>
+                <button type="button" class="btn btn-transparent" (click)="triggerModal(editData)">
+                    <fa-icon [icon]="edit"></fa-icon>
+                </button>
+                <button type="button" class="btn btn-transparent" (click)="triggerModal(deleteData)">
+                    <fa-icon [icon]="delete"></fa-icon>
+                </button>
+            </td>
+        </tr>
+    </tbody>
+    </table>
 
     <ng-template #editData let-modal>
     <div class="modal-header">

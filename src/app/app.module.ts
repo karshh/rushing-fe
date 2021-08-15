@@ -10,13 +10,15 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { SortPropertyDirective } from './directives/sort-property/sort-property.directive';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PaginationComponent } from './pagination/pagination.component';
+import { TableFormComponent } from './table-form/table-form.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     TableComponent,
     SortPropertyDirective,
-    PaginationComponent
+    PaginationComponent,
+    TableFormComponent
   ],
   imports: [
     BrowserModule,

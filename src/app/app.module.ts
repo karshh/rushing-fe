@@ -9,12 +9,14 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { SortPropertyDirective } from './directives/sort-property/sort-property.directive';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { PaginationComponent } from './pagination/pagination.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     TableComponent,
-    SortPropertyDirective
+    SortPropertyDirective,
+    PaginationComponent
   ],
   imports: [
     BrowserModule,

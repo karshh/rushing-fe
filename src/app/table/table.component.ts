@@ -29,30 +29,17 @@ export class TableComponent implements OnInit {
     playerName: this.playerNameControl,
   });
 
-  get page() {
-    return this.paginationState.page;
-  }
-
-  set page(_page: number) {
-    this.paginationState.page = _page;
-    this.playerService.updateState(this.playerNameControl.value);
-  }
-
   constructor(private playerService: PlayerService, private modalService: NgbModal) {
-  }
-
-  get paginationState() {
-    return this.playerService.paginationState;
   }
 
   ngOnInit(): void {
     this.players$ = this.playerService.players$;
 
-    this.playerService.updateState('');
+    this.playerService.updateTableState({ filter: '' });
     this.playerNameForm.controls.playerName.valueChanges.pipe(
       debounceTime(400),
       distinctUntilChanged(),
-      tap(_ => this.playerService.updateState(this.playerNameControl.value))
+      tap(_ => this.playerService.updateTableState({ filter: '' }))
     ).subscribe()
   }
   
@@ -65,15 +52,15 @@ export class TableComponent implements OnInit {
   }
 
   onSort(event: { column: string, direction: SortDirection }) {
-    this.playerService.sortState = {
-      column: event.direction == '' ? 'Player' : event.column,
-      direction: event.direction == 'desc' ? -1 : 1
+    var newTableState = {
+      sortColumn: event.direction == '' ? 'Player' : event.column,
+      sortDirection: event.direction == 'desc' ? -1 : 1
     }
-    this.playerService.updateState(this.playerNameControl.value);
+    this.playerService.updateTableState(newTableState);
   }
 
   onDownloadClick() {
-    this.playerService.download(this.playerNameControl.value);
+    this.playerService.download();
     return false;
 }
   

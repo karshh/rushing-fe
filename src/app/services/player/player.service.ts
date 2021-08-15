@@ -3,7 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { map, tap } from 'rxjs/operators';
 import { IPlayer } from 'src/app/models/player/iplayer';
 import { Subject } from 'rxjs';
-import { ISortState } from '../models/ISortState';
+import { ITableState } from '../models/ITableState';
 import { saveAs } from 'file-saver';
 import { IPaginationState } from '../models/IPaginationState';
 
@@ -14,15 +14,29 @@ export class PlayerService {
 
   constructor(private http: HttpClient) { }
 
-  sortState: ISortState = { 
-    column: 'Player',
-    direction: 1,
+  tableState: ITableState = { 
+    sortColumn: 'Player',
+    sortDirection: 1,
+    filter: ''
   }
 
   paginationState: IPaginationState = {
     page: 1,
     pageSize: 10,
     collectionSize: 0
+  }
+
+  updateTableState(tableState: {sortColumn?: string, sortDirection?: number, filter?: string}) {
+    if (tableState.sortColumn) this.tableState.sortColumn = tableState.sortColumn;
+    if (tableState.sortDirection) this.tableState.sortDirection = tableState.sortDirection;
+    if (tableState.filter) this.tableState.filter = tableState.filter;
+    this.refreshData();
+  }
+
+  updatePaginationState(page: number) {
+    this.paginationState.page = page;
+    this.refreshData();
+    
   }
 
   BASE_URL = 'http://127.0.0.1:5000/players/';
@@ -48,8 +62,8 @@ export class PlayerService {
     rushingFUM: "FUM",
   }
 
-  updateState(filter: string) {
-    this.getPlayers(filter)
+  refreshData() {
+    this.getPlayers()
     .pipe(
       tap(data => this.paginationState.collectionSize = data.size),
       map(data => {
@@ -79,8 +93,8 @@ export class PlayerService {
     })
   }
 
-  download(filter: string) {
-    this.getPlayers(filter, false).subscribe(data => {
+  download() {
+    this.getPlayers(false).subscribe(data => {
       var propertyList = Object.values(this.playerPropertyMap);
       let csv = data.players.map((row: any) => 
         propertyList.map(property => 
@@ -95,11 +109,11 @@ export class PlayerService {
     })
   }
 
-  private getPlayers(filter: string, paginate: boolean = true) {
+  private getPlayers(paginate: boolean = true) {
     var params = new HttpParams()
-      .set('filter', filter)
-      .set('sortColumn', this.sortState.column)
-      .set('sortDirection', this.sortState.direction)
+      .set('filter', this.tableState.filter)
+      .set('sortColumn', this.tableState.sortColumn)
+      .set('sortDirection', this.tableState.sortDirection)
     
       if (paginate) {
         params = params
@@ -109,5 +123,4 @@ export class PlayerService {
 
     return this.http.get<{ players: Array<any>, size: number }>(this.BASE_URL, { params })
   }
-
 }

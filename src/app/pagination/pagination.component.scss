@@ -1,0 +1,28 @@
+::ng-deep .pagination > li > a
+{
+    background-color: white;
+    color: #343a40;
+}
+
+::ng-deep .pagination > li > a:focus,
+::ng-deep .pagination > li > a:hover,
+::ng-deep .pagination > li > span:focus,
+::ng-deep .pagination > li > span:hover
+{
+    color: #5a5a5a;
+    background-color: #eee;
+    border-color: #f2f2f2;
+}
+
+::ng-deep .pagination > .active > a
+{
+    color: #f2f2f2;
+    background-color: #343a40 !Important;
+    border: solid 1px #343a40 !Important;
+}
+
+::ng-deep .pagination > .active > a:hover
+{
+    background-color: #343a40 !Important;
+    border: solid 1px #343a40;
+}

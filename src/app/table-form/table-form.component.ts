@@ -16,17 +16,17 @@ export class TableFormComponent implements OnInit {
   
   playerNameControl = new FormControl('');
   playerNameForm = new FormGroup({
-    playerName: this.playerNameControl,
+    playerName: this.playerNameControl
   });
   
   constructor(private playerService: PlayerService) { }
 
   ngOnInit(): void {
-    this.playerService.updateTableState({ filter: '' });
-    this.playerNameForm.controls.playerName.valueChanges.pipe(
+    this.playerService.updateTableFormState({ filter: '' });
+    this.playerNameControl.valueChanges.pipe(
       debounceTime(400),
       distinctUntilChanged(),
-      tap(_ => this.playerService.updateTableState({ filter: this.playerNameControl.value }))
+      tap((filter: string) => this.playerService.updateTableFormState({ filter }))
     ).subscribe()
   }
 

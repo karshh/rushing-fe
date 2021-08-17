@@ -74,6 +74,13 @@ export class PlayerService {
     })
   }
 
+  upload(jsonString: any) {
+    return this.http.post<IPlayerResponse>(this.BASE_URL + 'upload', JSON.parse(jsonString)).subscribe(result => {
+      console.log(result);
+      this.refreshData();
+    })
+  }
+
   private getPlayers(paginate: boolean = true) {
     var params = new HttpParams()
       .set('filter', this.tableFormState.filter)

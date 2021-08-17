@@ -5,9 +5,11 @@
       </form>
     </div>
     <div class="col-auto">
-      <button type="button" class="btn btn-light">
-        Import JSON <fa-icon [icon]="import"></fa-icon>
-      </button>
+      <input
+        style="display: none"
+        type="file" (change)="onJSONUpload($event)"
+        #fileInput />
+      <button class="btn btn-light" (click)="fileInput.click()">Import JSON <fa-icon [icon]="import"></fa-icon></button>
       &nbsp;
       <button type="button" class="btn btn-light" (click)="onDownloadClick()">
         Export CSV <fa-icon [icon]="export"></fa-icon>

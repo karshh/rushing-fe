@@ -34,4 +34,17 @@ export class TableFormComponent implements OnInit {
     this.playerService.download();
     return false;
   }
+
+  onJSONUpload(event: any) {
+    var selectedFile: File = event.target.files[0];
+    const fileReader = new FileReader();
+    fileReader.readAsText(selectedFile, "UTF-8");
+    fileReader.onload = () => {
+      var result = fileReader.result?.toString() || '{}'
+      this.playerService.upload(result)
+    }
+    fileReader.onerror = (error) => {
+      console.log(error);
+    }
+  }
 }

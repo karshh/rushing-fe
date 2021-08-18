@@ -3,9 +3,17 @@
 </nav>
 <br>
 <div class="container">
-    <app-table-form></app-table-form>
+    <app-table-form 
+        [serverStatus]="serverStatus"
+        (onFilter)="onFilter($event)"
+        (onDownload)="onDownload()"
+        (onUpload)="onUpload($event)"
+    ></app-table-form>
     <br>
     <app-pagination></app-pagination>
-    <app-table></app-table>
+    <app-table  
+        *ngIf="players$ | async as players"
+        [players]="players"
+        (onSort)="onSort($event)"
+    ></app-table>
 </div>
-<router-outlet></router-outlet>

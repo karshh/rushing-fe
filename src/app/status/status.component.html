@@ -1,0 +1,6 @@
+<span *ngIf="serverStatus != ServerStatus.NONE">
+   <span [ngSwitch]="serverStatus">
+        <fa-icon *ngSwitchCase="ServerStatus.ERROR" [icon]="exclamationTriangle"></fa-icon>
+        <fa-icon *ngSwitchDefault [icon]="spinner" [spin]="true"></fa-icon> {{serverStatus}}
+    </span>
+</span>

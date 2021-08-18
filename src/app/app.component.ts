@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ISortEvent } from './directives/models/ISortEvent';
+import { ServerStatus } from './services/models/ServerStatus';
 import { PlayerService } from './services/player/player.service';
 
 @Component({
@@ -6,5 +8,36 @@ import { PlayerService } from './services/player/player.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
+
+  players$ = this.playerService.players$;
+  serverStatus = ServerStatus.NONE;
+
+  constructor(private playerService: PlayerService) {
+  }
+
+  ngOnInit(): void {
+    this.playerService.serverStatus$.subscribe(newServerStatus => this.serverStatus = newServerStatus)
+    this.playerService.updateTableFormState({ filter: '' });
+  }
+
+  onSort(event: ISortEvent) {
+    this.playerService.updateTableState({
+      sortColumn: event.direction == '' ? 'Player' : event.column,
+      sortDirection: event.direction == 'desc' ? -1 : 1
+    });
+  }
+
+  onFilter(filter: string) {
+    this.playerService.updateTableFormState({ filter });
+  }
+  
+  onDownload() {
+    this.playerService.download();
+  }
+
+  onUpload(event: string) {
+    this.playerService.upload(event);
+  }
+
 }

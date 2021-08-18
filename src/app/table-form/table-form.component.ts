@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { faFileExport, faFileImport } from '@fortawesome/free-solid-svg-icons';
 import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
-import { PlayerService } from '../services/player/player.service';
+import { ServerStatus } from '../services/models/ServerStatus';
 
 @Component({
   selector: 'app-table-form',
@@ -13,38 +13,38 @@ export class TableFormComponent implements OnInit {
 
   export = faFileExport;
   import = faFileImport;
+
+  @Input() serverStatus: ServerStatus = ServerStatus.NONE;
+  @Input() filter = '';
+
+  @Output() onFilter = new EventEmitter<string>()
+  @Output() onDownload = new EventEmitter()
+  @Output() onUpload = new EventEmitter<string>()
   
-  playerNameControl = new FormControl('');
+  playerNameControl = new FormControl(this.filter);
   playerNameForm = new FormGroup({
     playerName: this.playerNameControl
   });
   
-  constructor(private playerService: PlayerService) { }
-
   ngOnInit(): void {
-    this.playerService.updateTableFormState({ filter: '' });
     this.playerNameControl.valueChanges.pipe(
       debounceTime(400),
       distinctUntilChanged(),
-      tap((filter: string) => this.playerService.updateTableFormState({ filter }))
+      tap((filter: string) => this.onFilter.emit(filter))
     ).subscribe()
   }
 
   onDownloadClick() {
-    this.playerService.download();
-    return false;
+    this.onDownload.emit();
   }
 
   onJSONUpload(event: any) {
     var selectedFile: File = event.target.files[0];
     const fileReader = new FileReader();
     fileReader.readAsText(selectedFile, "UTF-8");
-    fileReader.onload = () => {
-      var result = fileReader.result?.toString() || '{}'
-      this.playerService.upload(result)
-    }
-    fileReader.onerror = (error) => {
-      console.log(error);
+    fileReader.onload = _ => {
+      var result = fileReader.result?.toString() || '[]'
+      this.onUpload.emit(result);
     }
   }
 }

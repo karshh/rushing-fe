@@ -4,6 +4,9 @@
         <input type="text" class="form-control mr-sm-2" placeholder="Player Name" id="playerName" formControlName="playerName">
       </form>
     </div>
+    <div class="col">
+      <app-status [serverStatus]="serverStatus"></app-status>
+    </div>
     <div class="col-auto">
       <input
         style="display: none"

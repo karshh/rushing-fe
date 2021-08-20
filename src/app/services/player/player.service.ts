@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { tap } from 'rxjs/operators';
 import { IPlayer, playerPropertyList } from 'src/app/models/player/iplayer';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
+import { environment } from '../../../environments/environment';
 import { ITableState } from '../models/ITableState';
 import { saveAs } from 'file-saver';
 import { IPaginationState } from '../models/IPaginationState';
@@ -15,7 +16,7 @@ import { ServerStatus } from '../models/ServerStatus';
 })
 export class PlayerService {
 
-  BASE_URL = 'http://127.0.0.1:5000/players/';
+  BASE_URL = environment.backendURL;
   players$ = new Subject<IPlayer[]>();
   serverStatus$ = new Subject<ServerStatus>();
 
@@ -88,7 +89,7 @@ export class PlayerService {
 
   upload(jsonString: any) {
     this.serverStatus$.next(ServerStatus.IMPORT_JSON);
-    return this.http.post<IPlayerResponse>(this.BASE_URL + 'upload', JSON.parse(jsonString)).subscribe(result => {
+    return this.http.post<IPlayerResponse>(this.BASE_URL + '/players/upload', JSON.parse(jsonString)).subscribe(result => {
       this.refreshData();
     }, _ => {
       this.serverStatus$.next(ServerStatus.ERROR);
@@ -107,6 +108,6 @@ export class PlayerService {
           .set('limit', this.paginationState.pageSize);
       }
 
-    return this.http.get<IPlayerResponse>(this.BASE_URL, { params })
+    return this.http.get<IPlayerResponse>(this.BASE_URL + '/players', { params })
   }
 }

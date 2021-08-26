@@ -1,0 +1,7 @@
+{
+  "/players/*": {
+    "target": "https://tsi-karsh-backend.herokuapp.com",
+    "secure": true,
+    "changeOrigin": true
+  }
+}

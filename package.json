@@ -3,10 +3,11 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ng serve --proxy-config proxy.conf.json",
     "build": "ng build",
+    "heroku-postbuild": "ng build --configuration=production",
     "watch": "ng build --watch --configuration development",
-    "docker-start": "nodemon --exec ng serve --host 0.0.0.0 --port 4200",
+    "docker-start": "ng serve --host 0.0.0.0 --port 4200 --proxy-config proxy.conf.json",
     "test": "ng test"
   },
   "private": true,

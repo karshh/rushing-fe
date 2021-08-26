@@ -21,10 +21,18 @@ export class AppComponent implements OnInit {
     this.playerService.updateTableFormState({ filter: '' });
   }
 
+  get sortColumn() {
+    return this.playerService.tableState.sortColumn
+  }
+
+  get sortDirection() {
+    return this.playerService.tableState.sortDirection
+  }
+
   onSort(event: ISortEvent) {
     this.playerService.updateTableState({
-      sortColumn: event.direction == '' ? 'Player' : event.column,
-      sortDirection: event.direction == 'desc' ? -1 : 1
+      sortColumn: event.direction == '' ? '' : event.column,
+      sortDirection: event.direction
     });
   }
 

@@ -11,9 +11,11 @@
     ></app-table-form>
     <br>
     <app-pagination></app-pagination>
-    <app-table  
+    <app-table 
         *ngIf="players$ | async as players"
         [players]="players"
+        [sortColumn]="sortColumn"
+        [sortDirection]="sortDirection"
         (onSort)="onSort($event)"
     ></app-table>
 </div>

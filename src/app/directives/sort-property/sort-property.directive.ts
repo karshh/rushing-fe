@@ -13,11 +13,21 @@ export class SortPropertyDirective {
   direction: SortDirection = '';
   @Output() sort = new EventEmitter<ISortEvent>();
 
-  rotate: {[key: string]: SortDirection} = { 'asc': 'desc', 'desc': '', '': 'asc' };
   constructor() { }
 
+  rotate(sortDirection: SortDirection): SortDirection {
+    switch(sortDirection) {
+      case 1:
+        return -1;
+      case -1:
+        return '';
+      case '':
+        return 1;
+    }
+  }
+  
   onSort() {
-    this.direction = this.rotate[this.direction];
+    this.direction = this.rotate(this.direction);
     this.sort.emit({column: this.sortProperty, direction: this.direction});
   }
 

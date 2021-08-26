@@ -21,8 +21,8 @@ export class PlayerService {
   serverStatus$ = new Subject<ServerStatus>();
 
   tableState: ITableState = { 
-    sortColumn: 'Player',
-    sortDirection: 1,
+    sortColumn: '',
+    sortDirection: '',
   }
 
   tableFormState: ITableFormState = {

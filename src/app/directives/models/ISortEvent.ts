@@ -1,4 +1,4 @@
-export type SortDirection = 'asc' | 'desc' | '';
+export type SortDirection = 1 | -1 | '';
 
 export interface ISortEvent {
     column: string;

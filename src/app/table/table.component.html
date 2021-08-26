@@ -1,8 +1,7 @@
-
 <table class="table table-striped">
   <thead>
     <tr>
-        <th>Player</th>
+        <th scope="col" class="sortable-column" sort-property="Player" (sort)="sort($event)">Player</th>
         <th>Team</th>
         <th>Pos</th>
         <th>Att</th>
@@ -39,4 +38,3 @@
     </tr>
   </tbody>
 </table>
-

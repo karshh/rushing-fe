@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  backendURL: 'https://tsi-karsh-backend.herokuapp.com'
+  backendURL: 'http://localhost:5000'
 };
 
 /*

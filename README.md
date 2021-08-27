@@ -51,8 +51,8 @@ Notes about the following
 - Data can be imported into the table using `Import JSON` button. An example of the JSON structure can be found [here](https://raw.githubusercontent.com/tsicareers/nfl-rushing/master/rushing.json).
 
 ### Deployment
-
-For the purpose of demonstration, this project is deployed in heroku at the moment at https://tsi-karsh-frontend.herokuapp.com/.
+Make sure to update `backendURL` in `src/environments/environment.prod.ts` to point to the backend service.
+For the purpose of demonstration, this project is deployed in heroku at the moment at https://tsi-karsh-frontend.herokuapp.com/. 
 
 **1. Static distribution files**
 

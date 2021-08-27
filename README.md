@@ -1,11 +1,12 @@
 # TSI "the Rush" Challenge
 
-The purpose of this web app is to visualize rushing data in a sortable, filterable paginated table. See [Challenge Description](https://github.com/tsicareers/nfl-rushing).
+The purpose of this web app is to visualize rushing data in a sortable, filterable paginated table. See
+* [Challenge Description](https://github.com/tsicareers/nfl-rushing).
+* [Backend Project](https://github.com/karshh/rushing-be)
 
 ### Installation and running the application
 
 First, let's get some configuration out of the way:
-
 
 - Clone this repository.
 - Update `backendURL` in `src/environments/environment.ts` to point to the backend service. The committed code is defaulted to `http://localhost:5000`

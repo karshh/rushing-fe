@@ -1,7 +1,7 @@
 # TSI "the Rush" Challenge
 
 The purpose of this web app is to visualize rushing data in a sortable, filterable paginated table. See
-* [Challenge Description](https://github.com/tsicareers/nfl-rushing).
+* [Challenge Description](https://github.com/tsicareers/nfl-rushing)
 * [Backend Project](https://github.com/karshh/rushing-be)
 
 ### Installation and running the application
@@ -45,8 +45,8 @@ The visualization consists of a table representing football players' rushing sta
 
 Notes about the following
 - The table is paginated with 10 records per page. 
-- The table is sortable _Player_,  _Yds_, _Lng_ and _TD_
-- The table is filterable by _Player_
+- The table is sortable _Player_,  _Yds_, _Lng_ and _TD_. By default, the table is sorted by _Player_.
+- The table is filterable by _Player_.
 - The table can be exported using the `Export CSV` button.
 - Data can be imported into the table using `Import JSON` button. An example of the JSON structure can be found [here](https://raw.githubusercontent.com/tsicareers/nfl-rushing/master/rushing.json).
 
@@ -60,7 +60,9 @@ Run `npm run build`. this will create a `dist/` folder which should contain arti
 
 **2. Heroku**
 
-Install heroku CLI and create a heroku project.
+Install Heroku CLI and log in using the command ```heroku login```
+
+Create your heroku project.
 ```
 heroku create app-name
 ```

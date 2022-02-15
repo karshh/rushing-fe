@@ -1,7 +1,6 @@
 # TSI "the Rush" Challenge
 
 The purpose of this web app is to visualize rushing data in a sortable, filterable paginated table. See
-* [Challenge Description](https://github.com/tsicareers/nfl-rushing)
 * [Backend Project](https://github.com/karshh/rushing-be)
 
 ### Installation and running the application
